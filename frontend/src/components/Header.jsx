@@ -1,27 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-function Header() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const navigate = useNavigate();
-
-  // Check if the user is signed in on component mount
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsSignedIn(true);
-    } else {
-      setIsSignedIn(false);
-    }
-  }, []);
-
-  // Handle sign-out
-  const handleSignOut = () => {
-    localStorage.removeItem("token");
-    setIsSignedIn(false);
-    navigate("/");
-  };
-
+function Header({ isSignedIn, onSignOut }) {
   return (
     <header className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -59,6 +38,11 @@ function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link to="/place-bids" className="nav-link">
+                    Place Bids
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link to="/post-auction" className="nav-link">
                     Post Auction
                   </Link>
@@ -79,7 +63,7 @@ function Header() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <button onClick={handleSignOut} className="btn btn-outline-primary">
+                  <button onClick={onSignOut} className="btn btn-outline-primary">
                     Sign Out
                   </button>
                 </li>

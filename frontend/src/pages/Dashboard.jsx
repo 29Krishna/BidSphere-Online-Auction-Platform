@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
+  const [activeAuctionsCount, setActiveAuctionsCount] = useState(0);
+  const [bidsPlacedCount, setBidsPlacedCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch user data on component mount
+  // Fetch user data and counts on component mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -16,6 +18,7 @@ function Dashboard() {
       return;
     }
 
+    // Fetch user data
     axios
       .get("http://localhost:5000/api/auth/me", {
         headers: {
@@ -31,6 +34,34 @@ function Dashboard() {
         setLoading(false);
         localStorage.removeItem("token"); // Clear invalid token
         navigate("/sign-in"); // Redirect to sign-in on error
+      });
+
+    // Fetch active auctions count created by the logged-in user
+    axios
+      .get("http://localhost:5000/api/auctions/my-auctions/count", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setActiveAuctionsCount(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching active auctions count:", error);
+      });
+
+    // Fetch bids placed count
+    axios
+      .get("http://localhost:5000/api/auctions/bids-placed/count", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setBidsPlacedCount(response.data.count);
+      })
+      .catch((error) => {
+        console.error("Error fetching bids placed count:", error);
       });
   }, [navigate]);
 
@@ -50,7 +81,7 @@ function Dashboard() {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Active Auctions</h5>
-              <p className="card-text">You have 3 active auctions.</p>
+              <p className="card-text">You have {activeAuctionsCount} active auctions.</p>
               <a href="/my-auctions" className="btn btn-primary">
                 View Auctions
               </a>
@@ -61,7 +92,7 @@ function Dashboard() {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Bids Placed</h5>
-              <p className="card-text">You have placed 5 bids.</p>
+              <p className="card-text">You have placed {bidsPlacedCount} bids.</p>
               <a href="/bids-placed" className="btn btn-primary">
                 View Bids
               </a>
@@ -72,7 +103,7 @@ function Dashboard() {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Won Auctions</h5>
-              <p className="card-text">You have won 2 auctions.</p>
+              <p className="card-text">You have won 3 auctions.</p>
               <a href="/auctions-won" className="btn btn-primary">
                 View Won Items
               </a>

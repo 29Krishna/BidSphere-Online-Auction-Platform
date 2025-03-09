@@ -15,21 +15,22 @@ function SignUpPage() {
     try {
       await axios.post("http://localhost:5000/api/auth/signup", formData);
       alert("Signup successful. Please log in.");
-      navigate("/sign-in");
+      navigate("/sign-in"); 
     } catch (error) {
       alert(error.response?.data?.message || "Signup failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#4a90e2] to-[#50e3c2] p-6">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Sign Up</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-              Username
-            </label>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-gradient" style={{ background: "linear-gradient(45deg, #4a90e2, #50e3c2)" }}>
+      <div className="bg-white p-5 rounded shadow-lg" style={{ width: "100%", maxWidth: "400px" }}>
+        <div className="text-center mb-4">
+          <h2 className="fw-bold text-dark mb-3">Create Your Account</h2>
+          <p className="text-muted">Join us to start bidding</p>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">Username</label>
             <input
               type="text"
               name="username"
@@ -37,13 +38,11 @@ function SignUpPage() {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4a90e2] focus:border-[#4a90e2] outline-none transition duration-300"
+              className="form-control"
             />
           </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
             <input
               type="email"
               name="email"
@@ -51,13 +50,11 @@ function SignUpPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4a90e2] focus:border-[#4a90e2] outline-none transition duration-300"
+              className="form-control"
             />
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
+          <div className="mb-4">
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               name="password"
@@ -65,22 +62,24 @@ function SignUpPage() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4a90e2] focus:border-[#4a90e2] outline-none transition duration-300"
+              className="form-control"
             />
           </div>
-          <button
+          <button onClick={handleSubmit}
             type="submit"
-            className="w-full bg-[#4a90e2] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#357abd] transition duration-300"
+            className="btn btn-primary w-100 py-2"
           >
             Sign Up
           </button>
         </form>
-        <p className="mt-6 text-center text-gray-600">
-          Already have an account?{" "}
-          <Link to="/sign-in" className="text-[#4a90e2] hover:underline font-semibold">
-            Sign In
-          </Link>
-        </p>
+        <div className="mt-4 text-center">
+          <p className="text-muted">
+            Already have an account?{" "}
+            <Link to="/sign-in" className="text-decoration-none text-primary fw-bold">
+              Sign In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
